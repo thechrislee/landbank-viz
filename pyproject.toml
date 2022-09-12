@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "landbank-viz"
+version = "0.1.0"
+description = "The hypermodern Python project"
+license = "MIT"
+readme = "README.md"
+homepage = "https://github.com/thechrislee/landbank-viz"
+repository = "https://github.com/thechrislee/landbank-viz"
+keywords = ["landbank-viz", "cleveland"]
+authors = ["Chris Lee <chris@noreply.github.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
