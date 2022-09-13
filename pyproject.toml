@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "landbank-viz"
 version = "0.1.0"
-description = "The hypermodern Python project"
+description = "Cuyahoga County Landbank Propery Visualization"
 license = "MIT"
 readme = "README.md"
 homepage = "https://github.com/thechrislee/landbank-viz"
