@@ -2,7 +2,7 @@
 bar
 """
 
-import bs4
+from bs4 import BeautifulSoup
 import requests
 import os
 
@@ -24,9 +24,27 @@ class Scrape:
         else:
             print("----'html_doc' already exists----")
 
+    def parse_html(self):
+        """parse the html file"""
+        rows = self.bs.find_all("tr")
+        for row in rows:
+            data = []
+            cols = row.find_all("td")
+            for col in cols:
+                data.append(col.text.strip())
+            print(len(data))
+            print(data)
+            print("-----------------------")
+            #print(f"address: {address}")
+        
 
     def doit(self):
         """it does it"""
         #response = requests.get(self.url)
         self.get_html()
-        #self.bs = bs4.BeautifulSoup(response.content)
+        with open("html_file") as file:
+            html_file = "".join([line for line in file])
+
+        #print(html_file)
+        self.bs = BeautifulSoup(html_file, "html.parser")
+        self.parse_html()
