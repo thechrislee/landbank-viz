@@ -27,15 +27,20 @@ class Scrape:
     def parse_html(self):
         """parse the html file"""
         rows = self.bs.find_all("tr")
+        addresses = []
         for row in rows:
-            data = []
             cols = row.find_all("td")
-            for col in cols:
-                data.append(col.text.strip())
-            print(len(data))
-            print(data)
-            print("-----------------------")
-            #print(f"address: {address}")
+            data = [col.text.strip() for col in cols]
+            if len(data) == 7:
+                house_num = data[1] if data[1] != "" else "NaN"
+                street = data[2] if data[2] != "" else "NaN"
+                city = data[3] if data[3] != "" else "NaN"
+                address = f"{house_num} {street} {city}"
+                addresses.append(address)
+          
+        for address in addresses:
+            print(address)
+        
         
 
     def doit(self):
