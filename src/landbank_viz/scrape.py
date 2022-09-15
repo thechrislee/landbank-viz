@@ -41,7 +41,6 @@ class Scrape:
         
     def doit(self):
         """it does it"""
-        response = requests.get(self.url)
         html = self.get_html()
         self.bs = BeautifulSoup(html, "html.parser")
         addresses = self.get_addresses()
