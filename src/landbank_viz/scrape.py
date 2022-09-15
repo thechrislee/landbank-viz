@@ -4,7 +4,7 @@ bar
 
 from bs4 import BeautifulSoup
 import requests
-import os
+import pathlib
 
 class Scrape:
     """ foo """
@@ -12,19 +12,19 @@ class Scrape:
         """"""
         self.url = url
 
-    def get_html(self):
+    def get_html(self) -> str:
         """write html file locally"""
-        if not os.path.exists("html_file"):
-            print("---Writing html file locally----")
-            response = requests.get(self.url)
-            data =  "".join([line for line in response.text])
-            with open("html_file", "w") as file:
-                for line in data:
-                    file.write(line)
-        else:
-            print("----'html_doc' already exists----")
+        html_file = pathlib.Path("html_file")
 
-    def parse_html(self):
+        if html_file.exists():
+            return html_file.read_text()
+        
+        print("---Writing html file locally----")
+        response = requests.get(self.url)
+        html_file.write_text(response.text)
+        return response.text
+
+    def get_addresses(self) -> list:
         """parse the html file"""
         rows = self.bs.find_all("tr")
         addresses = []
@@ -37,19 +37,13 @@ class Scrape:
                 city = data[3] if data[3] != "" else "NaN"
                 address = f"{house_num} {street} {city}"
                 addresses.append(address)
-          
-        for address in addresses:
-            print(address)
+        return addresses  
         
-        
-
     def doit(self):
         """it does it"""
-        #response = requests.get(self.url)
-        self.get_html()
-        with open("html_file") as file:
-            html_file = "".join([line for line in file])
-
-        #print(html_file)
-        self.bs = BeautifulSoup(html_file, "html.parser")
-        self.parse_html()
+        response = requests.get(self.url)
+        html = self.get_html()
+        self.bs = BeautifulSoup(html, "html.parser")
+        addresses = self.get_addresses()
+        for address in addresses:
+            print(address)
