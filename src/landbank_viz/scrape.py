@@ -6,9 +6,11 @@ from bs4 import BeautifulSoup
 import requests
 import pathlib
 
+
 class Scrape:
-    """ foo """
-    def __init__(self, url:str) -> None:
+    """foo"""
+
+    def __init__(self, url: str) -> None:
         """"""
         self.url = url
 
@@ -18,7 +20,7 @@ class Scrape:
 
         if html_file.exists():
             return html_file.read_text()
-        
+
         print("---Writing html file locally----")
         response = requests.get(self.url)
         html_file.write_text(response.text)
@@ -37,8 +39,8 @@ class Scrape:
                 city = data[3] if data[3] != "" else "NaN"
                 address = f"{house_num} {street} {city}"
                 addresses.append(address)
-        return addresses  
-        
+        return addresses
+
     def doit(self):
         """it does it"""
         html = self.get_html()
