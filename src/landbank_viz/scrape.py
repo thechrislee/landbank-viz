@@ -28,7 +28,7 @@ class Scrape:
         return response.text
 
     def get_addresses(self) -> list:
-        """parse the html file"""
+        """parse the html file and return a list of addresses"""
         pattern = re.compile(r"\(.+?\)")
         rows = self.bs.find_all("tr")
         addresses = []
