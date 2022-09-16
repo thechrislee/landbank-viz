@@ -1,3 +1,4 @@
+![Code style: black][code-style-black]
 # landbank
 
 > plots Cuyahoga Landbank Properties
