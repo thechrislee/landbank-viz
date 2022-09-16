@@ -5,6 +5,7 @@ bar
 from bs4 import BeautifulSoup
 import requests
 import pathlib
+import re
 
 
 class Scrape:
@@ -28,6 +29,7 @@ class Scrape:
 
     def get_addresses(self) -> list:
         """parse the html file"""
+        pattern = re.compile(r"\(.+?\)")
         rows = self.bs.find_all("tr")
         addresses = []
         for row in rows:
@@ -37,8 +39,10 @@ class Scrape:
                 house_num = data[1] if data[1] != "" else "NaN"
                 street = data[2] if data[2] != "" else "NaN"
                 city = data[3] if data[3] != "" else "NaN"
+
                 address = f"{house_num} {street} {city}"
-                addresses.append(address)
+                if "NaN" not in address:
+                    addresses.append(pattern.sub("", address))
         return addresses
 
     def doit(self):
