@@ -9,7 +9,7 @@ This application scrapes address data from [Cuyahoga Land Bank](https://cuyahoga
 
 Use git to clone the repository.
 
-```bash
+```console
 $ git clone https://github.com/thechrislee/landbank-viz.git
 $ cd landbank-viz
 $ poetry shell
@@ -17,7 +17,7 @@ $ poetry shell
 
 ## Usage
 
-```python
+```console
 I'll figure this out later.
 ```
 
