@@ -3,7 +3,7 @@
 
 > plots Cuyahoga Landbank Properties
 
-This application scrapes address data from [Cuyahoga Land Bank](https://cuyahogalandbank.org/land-bank-homes/). This data is data is then plotted to a nifty map. :house_with_garden:
+This application scrapes address data from [Cuyahoga Land Bank](https://cuyahogalandbank.org/land-bank-homes/). This data is then plotted to a nifty map. :house_with_garden:
 
 ## Installation
 
