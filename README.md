@@ -6,7 +6,7 @@ This application scrapes address data from [Cuyahoga Land Bank](https://cuyahoga
 
 ## Installation
 
-Use the package manager [pip](https://pip.pypa.io/en/stable/) to install foobar.
+Use git to clone the repository.
 
 ```bash
 git clone https://github.com/thechrislee/landbank-viz.git
