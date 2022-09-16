@@ -29,7 +29,16 @@ class Scrape:
 
     def get_addresses(self) -> list:
         """parse the html file and return a list of addresses"""
-        pattern = re.compile(r"\(.+?\)")
+
+        pattern = re.compile(
+            r"""
+                             \(.+?\)                            # Match parentheses
+                             |                                      # logical OR
+                             (\bAve\b|\bRd\b|\bSt\b|\bLn\b)         # Match abbreviations
+                             """,
+            re.VERBOSE,
+        )
+
         rows = self.bs.find_all("tr")
         addresses = []
         for row in rows:
@@ -41,14 +50,20 @@ class Scrape:
                 city = data[3] if data[3] != "" else "NaN"
 
                 address = f"{house_num} {street} {city}"
+
                 if "NaN" not in address:
-                    addresses.append(pattern.sub("", address))
+                    address = pattern.sub("", address)
+                    addresses.append((address, city))
         return addresses
+
+    def get_geocodes(self, addresses: list) -> list:
+        """takes a list of addresses and returns the corresponding geocodes"""
+        for address in addresses:
+            print(address)
 
     def doit(self):
         """it does it"""
         html = self.get_html()
         self.bs = BeautifulSoup(html, "html.parser")
         addresses = self.get_addresses()
-        for address in addresses:
-            print(address)
+        self.get_geocodes(addresses)
