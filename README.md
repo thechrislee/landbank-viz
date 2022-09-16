@@ -9,7 +9,9 @@ This application scrapes address data from [Cuyahoga Land Bank](https://cuyahoga
 Use git to clone the repository.
 
 ```bash
-git clone https://github.com/thechrislee/landbank-viz.git
+$ git clone https://github.com/thechrislee/landbank-viz.git
+$ cd landbank-viz
+$ poetry shell
 ```
 
 ## Usage
