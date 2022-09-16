@@ -5,6 +5,8 @@ bar
 from bs4 import BeautifulSoup
 import requests
 import pathlib
+import re
+import csv
 
 
 class Scrape:
@@ -27,7 +29,17 @@ class Scrape:
         return response.text
 
     def get_addresses(self) -> list:
-        """parse the html file"""
+        """parse the html file and return a list of addresses"""
+
+        pattern = re.compile(
+            r"""
+            \(.+?\)                                # Match parentheses
+            |                                      # logical OR
+            (\bAve\b|\bRd\b|\bSt\b|\bLn\b|\bCt\b)  # Match abbreviations
+            """,
+            re.VERBOSE,
+        )
+
         rows = self.bs.find_all("tr")
         addresses = []
         for row in rows:
@@ -37,14 +49,25 @@ class Scrape:
                 house_num = data[1] if data[1] != "" else "NaN"
                 street = data[2] if data[2] != "" else "NaN"
                 city = data[3] if data[3] != "" else "NaN"
-                address = f"{house_num} {street} {city}"
-                addresses.append(address)
+
+                address = f"{house_num} {street}"
+
+                if "NaN" not in address:
+                    address = pattern.sub("", address).strip()
+                    addresses.append((address, city))
         return addresses
+
+    def get_geocodes(self, addresses: list) -> list:
+        """takes a list of addresses and returns the corresponding geocodes"""
+        csvfile = "addresses.csv"
+        with open(csvfile, "w") as csvfile:
+            csv_writer = csv.writer(csvfile, quoting=csv.QUOTE_MINIMAL)
+            for key, address in enumerate(addresses):
+                csv_writer.writerow([key] + [address[0]] + [address[1]] + ["OH"] + [""])
 
     def doit(self):
         """it does it"""
         html = self.get_html()
         self.bs = BeautifulSoup(html, "html.parser")
         addresses = self.get_addresses()
-        for address in addresses:
-            print(address)
+        self.get_geocodes(addresses)
