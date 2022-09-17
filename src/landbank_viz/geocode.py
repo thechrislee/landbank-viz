@@ -70,6 +70,8 @@ class CensusGeocode:
 
         params = {"address": address, "benchmark": benchmark.name, "format": format}
 
+        logger.info(f"geocoding {address} @ {cls._address_url} {params}")
+
         response = requests.get(cls._address_url, params=params)
 
         response.raise_for_status()

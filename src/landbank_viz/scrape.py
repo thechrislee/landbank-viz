@@ -26,6 +26,12 @@ class BaseScraper:
         return f"{self.__class__.__name__} -> {self.url}"
 
     @property
+    def timestamp(self) -> int:
+        """Timestamp for today."""
+        today = date.today()
+        return int(datetime(today.year, today.month, today.day).timestamp())
+
+    @property
     def cache_name(self) -> str:
         try:
             return self._cache_name
@@ -33,9 +39,9 @@ class BaseScraper:
             pass
 
         filename = pathlib.Path(parse_url(self.url).path).name
-        today = date.today()
-        timestamp = int(datetime(today.year, today.month, today.day).timestamp())
-        self._cache_name = f"{self._cache_dir}/{filename}-{timestamp}.html"
+
+        self._cache_name = f"{self._cache_dir}/{filename}-{self.timestamp}.html"
+
         return self._cache_name
 
     @property
@@ -49,10 +55,13 @@ class BaseScraper:
         cached_html = pathlib.Path(self.cache_name)
 
         if cached_html.exists():
+            logger.info(f"{self.cache_name} exists.. using cached data.")
             self._html = cached_html.read_text()
             return self._html
 
+        logger.info(f"{self.cache_name} DNE downloading from {self.url}")
         response = requests.get(self.url)
+        response.raise_for_status()
         cached_html.write_text(response.text)
         self._html = response.text
         return self._html
@@ -124,10 +133,8 @@ class ParcelIdScraper(BaseScraper):
             pass
 
         filename = pathlib.Path(parse_url(self.url).path).name
-        today = date.today()
-        timestamp = int(datetime(today.year, today.month, today.day).timestamp())
         self._cache_name = (
-            f"{self._cache_dir}/{filename}-{self.parcel_id}-{timestamp}.html"
+            f"{self._cache_dir}/{filename}-{self.parcel_id}-{self.timestamp}.html"
         )
         return self._cache_name
 
