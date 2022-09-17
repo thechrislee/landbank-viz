@@ -21,7 +21,11 @@ class Parcel:
 
     @classmethod
     def available(cls, url: str) -> list["Parcel"]:
-        return [cls(**info) for info in AvailableScraper(url).parcels]
+        return [
+            cls(**info)
+            for info in AvailableScraper(url).parcels
+            if not "not available" in info["status"].lower()
+        ]
 
     @property
     def address(self) -> str:
@@ -48,3 +52,7 @@ class Parcel:
             logger.error(f"{self.address} {error}")
             self._coordinates = "Not Available"
         return self._coordinates
+
+    def __str__(self) -> str:
+
+        return f"{self.parcel_id} {self.address} {self.coordinates}"

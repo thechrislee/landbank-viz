@@ -17,7 +17,7 @@ def scrape_anything(url: str = None):
     parcels = Parcel.available(url)
 
     for parcel in parcels:
-        print(parcel.address, parcel.coordinates)
+        print(parcel)
 
 
 if __name__ == "__main__":
