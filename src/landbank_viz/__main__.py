@@ -24,9 +24,7 @@ def scrape_anything(
 
     parcels = [parcel for parcel in Parcel.inventory(url) if parcel.is_available]
 
-    geocoder = CensusGeocode()
-
-    results = geocoder.lookup_addresses([p.address for p in parcels])
+    results = CensusGeocode.lookup_addresses([p.address for p in parcels])
 
     for entry in results:
         if not entry.is_match:
