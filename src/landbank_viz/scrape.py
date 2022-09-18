@@ -97,14 +97,14 @@ class AvailableScraper(BaseScraper):
         for row in rows:
             cols = [col.text.strip() for col in row.find_all("td")]
             try:
-                pid, unit, street, city, ward, date, status = cols
+                pid, number, street, city, ward, date, status = cols
             except ValueError as error:
                 logger.debug(f"{error} Unable decode scraped data {cols}")
                 continue
 
             item = {
                 "parcel_id": pid,
-                "unit": unit,
+                "number": number,
                 "street": street,
                 "city": city,
                 "ward": ward,
