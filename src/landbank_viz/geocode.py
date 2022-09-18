@@ -104,13 +104,13 @@ class CensusGeocode:
 
     @classmethod
     def lookup_address(
-        cls, address: str, benchmark: Benchmark = None, format: str = "json"
+        cls, address: str, benchmark: Benchmark = None
     ) -> dict[str, str]:
         """Lookup entry for the given address."""
 
         benchmark = benchmark or Benchmark.default()
 
-        params = {"address": address, "benchmark": benchmark.name, "format": format}
+        params = {"address": address, "benchmark": benchmark.name, "format": "json"}
 
         logger.info(f"geocoding {address} @ {cls._address_url} {params}")
 
