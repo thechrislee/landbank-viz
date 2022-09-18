@@ -10,10 +10,17 @@ cli = typer.Typer()
 
 
 @cli.command()
-def scrape_anything(url: str = None):
-    """"""
+def scrape_anything(
+    url: str = typer.Argument(
+        "https://cuyahogalandbank.org/all-available-properties/", show_default=True
+    ),
+    debug: bool = typer.Option(False, "--debug", "-D", help="Turn on debugging output"),
+):
+    """Queries the Cuyahoga Land Bank for available properties and prints a
+    list of property addresses and corresponding latitude/longitude coordinates.
+    """
 
-    url = url or "https://cuyahogalandbank.org/all-available-properties/"
+    (logger.enable if debug else logger.disable)("landbank_viz")
 
     parcels = [parcel for parcel in Parcel.inventory(url) if parcel.is_available]
 
@@ -25,7 +32,7 @@ def scrape_anything(url: str = None):
         if not entry.is_match:
             logger.info(f"Not a match: {entry}")
             continue
-        logger.info(f"Match {entry.parsed} {entry.coordinates}")
+        print(entry.parsed, entry.coordinates)
 
 
 if __name__ == "__main__":
