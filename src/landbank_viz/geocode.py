@@ -6,15 +6,11 @@ import csv
 from dataclasses import dataclass
 from functools import lru_cache
 from io import StringIO
-
+from typing import Any
 
 import requests
 
 from loguru import logger
-
-
-class NoMatchForAddress(Exception):
-    pass
 
 
 @dataclass
@@ -71,6 +67,7 @@ class Benchmark:
     @classmethod
     @lru_cache
     def benchmarks(cls) -> list["Benchmark"]:
+        """Returns a list of Benchmark instances initialized with online data."""
         response = requests.get(cls._url)
         response.raise_for_status()
         result = response.json()
@@ -83,6 +80,7 @@ class Benchmark:
 
     @classmethod
     def default(cls) -> "Benchmark":
+        """Returns the current default Benchmark."""
         for benchmark in cls.benchmarks():
             if benchmark.isDefault:
                 return benchmark
@@ -105,7 +103,7 @@ class CensusGeocode:
     @classmethod
     def lookup_address(
         cls, address: str, benchmark: Benchmark = None
-    ) -> dict[str, str]:
+    ) -> dict[str, Any]:
         """Lookup entry for the given address."""
 
         benchmark = benchmark or Benchmark.default()
@@ -130,17 +128,9 @@ class CensusGeocode:
 
         """Perform a bulk lookup for the addresses given."""
 
-        addresses_csv = StringIO()
-        line_fmt = "{},{},,"
-        for uid, address in enumerate(addresses):
-            print(line_fmt.format(uid, address), file=addresses_csv)
-        addresses_csv.seek(0)
-
-        benchmark = benchmark or Benchmark.default()
-
-        data = {
-            "benchmark": benchmark.name,
-        }
+        addresses_csv = StringIO(
+            "\n".join([f"{uid},{address},," for uid, address in enumerate(addresses)])
+        )
 
         # EJO the .csv suffix attached to the filename is required by
         #     the API to determine the input file type, rather than
@@ -151,17 +141,22 @@ class CensusGeocode:
             "addressFile": ("addresses.csv", addresses_csv, "text/csv"),
         }
 
+        benchmark = benchmark or Benchmark.default()
+
+        data = {
+            "benchmark": benchmark.name,
+        }
+
         response = requests.post(cls._bulk_url, data=data, files=files)
 
-        response.raise_for_status()
-
-        logger.debug(response)
-
-        if not response:
+        try:
+            response.raise_for_status()
+        except Exception as error:
             logger.debug("writing response to 'response.html'")
             open("response.html", "w").write(response.text)
             logger.debug("writing addresses to 'addresses.csv'")
             open("addressess.csv", "w").write(addresses_csv.getvalue())
+            raise
 
         rdr = csv.DictReader(
             StringIO(response.text),
