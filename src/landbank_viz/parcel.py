@@ -6,7 +6,7 @@ from dataclasses import dataclass
 from loguru import logger
 
 
-from .scrape import AvailableScraper, ParcelIdScraper
+from .scrape import AvailableScraper
 
 
 @dataclass
