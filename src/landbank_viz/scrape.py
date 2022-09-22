@@ -59,15 +59,34 @@ class Scrape:
 
     def get_geocodes(self, addresses: list) -> list:
         """takes a list of addresses and returns the corresponding geocodes"""
-        csvfile = "addresses.csv"
-        with open(csvfile, "w") as csvfile:
+        url = "https://geocoding.geo.census.gov/geocoder/locations/addressbatch"
+        csv_file = "addresses.csv"
+        with open(csv_file, "w") as csvfile:
             csv_writer = csv.writer(csvfile, quoting=csv.QUOTE_MINIMAL)
             for key, address in enumerate(addresses):
                 csv_writer.writerow([key] + [address[0]] + [address[1]] + ["OH"] + [""])
+
+        with open(csv_file, "rb") as payload:
+            files = {"addressFile": payload, "benchmark": (None, "4")}
+
+            geocodes = []
+            pattern = re.compile(r"\B,\B")
+            response = requests.post(url, files=files)
+            for line in response.text.splitlines():
+                result = pattern.split(line)
+                if len(result) == 8:
+                    address = result[4]
+                    geocode = result[5]
+                    geocodes.append((address, geocode))
+            
+            return geocodes
+
 
     def doit(self):
         """it does it"""
         html = self.get_html()
         self.bs = BeautifulSoup(html, "html.parser")
         addresses = self.get_addresses()
-        self.get_geocodes(addresses)
+        geocodes = self.get_geocodes(addresses)
+        for line in geocodes:
+            print(line)

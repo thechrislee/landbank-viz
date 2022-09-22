@@ -1,0 +1,9 @@
+### Desired Application Use and Results
+
+1. User launches the app using the following command: landbank
+2. The app will then scrape the data from the landbank website and make an API call to generate the geocodes
+3. The app will then spawn a new window to display the visualization.
+4. The geocoded addresses will be plotted on a map.
+5. The user of the app should be able to click on the plots and view more details on each property
+	- property details would include the address and possibly a link to street view.
+
