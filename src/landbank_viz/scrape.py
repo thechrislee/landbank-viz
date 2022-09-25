@@ -14,7 +14,15 @@ class Scrape:
 
     def __init__(self, url: str) -> None:
         """"""
-        self.url = url
+        self._url = url
+
+    @property
+    def url(self):
+        return self._url
+
+    @url.setter
+    def url(self, url):
+        self._url = url
 
     def get_html(self) -> str:
         """write html file locally"""
@@ -78,9 +86,8 @@ class Scrape:
                     address = result[4]
                     geocode = result[5]
                     geocodes.append((address, geocode))
-            
-            return geocodes
 
+            return geocodes
 
     def doit(self):
         """it does it"""
