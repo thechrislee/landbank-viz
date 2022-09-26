@@ -17,12 +17,14 @@ class Scrape:
         self._url = url
 
     @property
-    def url(self):
-        return self._url
+    def url(self) -> str:
+        return getattr(
+            self, "_url", "https://cuyahogalandbank.org/all-available-properties/"
+        )
 
     @url.setter
-    def url(self, url):
-        self._url = url
+    def url(self, new_url: str) -> None:
+        self._url = new_url
 
     def get_html(self) -> str:
         """write html file locally"""
