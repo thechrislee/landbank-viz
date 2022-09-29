@@ -1,6 +1,7 @@
 """"""
 import typer
 from .scrape import Scrape
+from .plot import Plot
 
 cli = typer.Typer()
 
@@ -9,8 +10,10 @@ cli = typer.Typer()
 def scrape_anything(url: str):
     """"""
     scraper = Scrape(url)
-    scraper.doit()
+    geocodes = scraper.doit()
     # print(scraper.bs)
+    plot = Plot(geocodes)
+    plot.create_map()
 
 
 if __name__ == "__main__":

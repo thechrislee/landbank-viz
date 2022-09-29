@@ -7,6 +7,8 @@ import requests
 import pathlib
 import re
 import csv
+import gmplot
+from .plot import Plot
 
 
 class Scrape:
@@ -59,10 +61,11 @@ class Scrape:
                 house_num = data[1] if data[1] != "" else "NaN"
                 street = data[2] if data[2] != "" else "NaN"
                 city = data[3] if data[3] != "" else "NaN"
+                status = data[6] if data[6] != "" else "NaN"
 
                 address = f"{house_num} {street}"
 
-                if "NaN" not in address:
+                if "NaN" not in address and "Not Available" not in status:
                     address = pattern.sub("", address).strip()
                     addresses.append((address, city))
         return addresses
@@ -91,11 +94,10 @@ class Scrape:
 
             return geocodes
 
-    def doit(self):
+    def doit(self) -> list:
         """it does it"""
         html = self.get_html()
         self.bs = BeautifulSoup(html, "html.parser")
         addresses = self.get_addresses()
         geocodes = self.get_geocodes(addresses)
-        for line in geocodes:
-            print(line)
+        return geocodes
