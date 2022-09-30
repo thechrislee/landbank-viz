@@ -94,7 +94,7 @@ class Scrape:
 
             return geocodes
 
-    def just_doit(self) -> list:
+    def setup(self) -> list:
         """it does it"""
         html = self.get_html()
         self.bs = BeautifulSoup(html, "html.parser")

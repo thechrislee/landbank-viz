@@ -10,8 +10,7 @@ cli = typer.Typer()
 def scrape_anything(url: str):
     """"""
     scraper = Scrape(url)
-    geocodes = scraper.doit()
-    # print(scraper.bs)
+    geocodes = scraper.setup()
     plotter = PlotCleveland()
     plotter.plot_to_html(geocodes, "cleveland_map.html")
 
