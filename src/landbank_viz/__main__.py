@@ -1,7 +1,7 @@
 """"""
 import typer
 from .scrape import Scrape
-from .plot import Plot
+from .plot import PlotCleveland
 
 cli = typer.Typer()
 
@@ -12,8 +12,8 @@ def scrape_anything(url: str):
     scraper = Scrape(url)
     geocodes = scraper.doit()
     # print(scraper.bs)
-    plot = Plot(geocodes)
-    plot.create_map()
+    plotter = PlotCleveland()
+    plotter.plot_to_html(geocodes, "cleveland_map.html")
 
 
 if __name__ == "__main__":
