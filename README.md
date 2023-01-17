@@ -18,8 +18,23 @@ $ poetry shell
 ## Usage
 
 ```console
-I'll figure this out later.
+$ landbank --help
+Usage: landbank [OPTIONS] URL
+
+Arguments:
+  URL  [required]
+
+Options:
+  --install-completion [bash|zsh|fish|powershell|pwsh]
+                                  Install completion for the specified shell.
+  --show-completion [bash|zsh|fish|powershell|pwsh]
+                                  Show completion for the specified shell, to
+                                  copy it or customize the installation.
+  --help                          Show this message and exit.
+
+$ landbank https://cuyahogalandbank.org/all-available-properties/
 ```
+![Info](https://user-images.githubusercontent.com/79058735/212891980-288e6882-b5fc-4c0a-aa83-fbaf1cbeac45.png)
 
 ## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
@@ -28,3 +43,4 @@ Please make sure to update tests as appropriate.
 
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
+
